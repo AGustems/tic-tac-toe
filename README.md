@@ -11,6 +11,6 @@ A simple game of Tic Tac Toe, a game for two players, X and O, who take turns ma
 Done with HTML and CSS for the visual part and Vanilla JavaScript for the logic.
 
 ## Links
-* **Deployed App**: [Tic Tac Toe](http://www.google.com)
+* **Deployed App**: [Tic Tac Toe](https://agustems.github.io/tic-tac-toe/)
 * **My Github**: [Github](https://github.com/AGustems/)
 * **My LinkedIn** [LinkedIn](https://www.linkedin.com/in/albagustemsolle/)
