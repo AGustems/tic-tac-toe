@@ -1,5 +1,5 @@
 // Variables needed (Turn, classes, winning combinations)
-let circleTurn
+let isCircleTurn
 const xClass = 'x'
 const oClass = 'o'
 const winningCombs = [
@@ -22,43 +22,39 @@ const restartButton = document.getElementById('restartBtn')
 const xPoints = document.getElementById('xPoints')
 const oPoints = document.getElementById('oPoints')
 
-// Function to start the game
 function startGame() {
-    circleTurn = false
+    isCircleTurn = false
     cellElements.forEach(cell => {
         cell.classList.remove(xClass)
         cell.classList.remove(oClass)
-        cell.removeEventListener('click', handleClick)
-        cell.addEventListener('click', handleClick, {once: true})
+        cell.removeEventListener('click', handleCellClick)
+        cell.addEventListener('click', handleCellClick, {once: true})
     })
     checkLocalStorage()
     setHoverClass()
     winMessage.classList.remove('show')
 }
 
-// Function to trigger the end game screen
 function endGame(draw) {
     if(draw){
         winMessageText.innerHTML = 'Draw!'
     } else {
-        winMessageText.innerHTML = `${circleTurn ? "O's" : "X's"} Wins!`
-        addWin(circleTurn)
+        winMessageText.innerHTML = `${isCircleTurn ? "O's" : "X's"} Wins!`
+        addWin(isCircleTurn)
     }
     winMessage.classList.add('show')
 }
 
-// Function to check if there is a draw
 function isDraw() {
     return [...cellElements].every(cell => {
         return cell.classList.contains(xClass) || cell.classList.contains(oClass)
     })
 }
 
-// Function to handle the click in the diferent cells
-function handleClick(e){
+function handleCellClick(e){
     const cell = e.target
-    const currentClass = circleTurn ? oClass : xClass
-    placeMark(cell, currentClass)
+    const currentClass = isCircleTurn ? oClass : xClass
+    placeCellMark(cell, currentClass)
     if(checkWin(currentClass)){
         endGame(false)
     } else if (isDraw()){
@@ -69,25 +65,23 @@ function handleClick(e){
     }
 }
 
-// Function to place the mark in the cell clicked
-function placeMark(cell, currentClass){
+function placeCellMark(cell, currentClass){
     cell.classList.add(currentClass)
+}
+
+function switchTurns(){
+    isCircleTurn = !isCircleTurn
 }
 
 // Function to add the hover mark effect to the cells
 function setHoverClass() {
     board.classList.remove(xClass)
     board.classList.remove(oClass)
-    if (circleTurn){
+    if (isCircleTurn){
         board.classList.add(oClass)
     } else {
         board.classList.add(xClass)
     }
-}
-
-// Function to switch between X and O
-function switchTurns(){
-    circleTurn = !circleTurn
 }
 
 // Function to check if one of the winning combinations has occured
@@ -112,19 +106,17 @@ function checkLocalStorage(){
     }
 }
 
-// Function to add the victory from X or O in the localStorage
-function addWin(circleTurn){
-    if(circleTurn){
+function addWin(isCircleTurn){
+    // Adding a O win to the local storage
+    if(isCircleTurn){
         const pointsOs = localStorage.getItem('oPoints')
         const newOPoints = JSON.parse(pointsOs) + 1;
         localStorage.setItem('oPoints', `${newOPoints}`)
-    } else if (!circleTurn){
-        const pointsXs = localStorage.getItem('xPoints')
-        const newXPoints = JSON.parse(pointsXs) + 1;
-        localStorage.setItem('xPoints', `${newXPoints}`)
-    } else {
-        return
     }
+    // Adding a X win to the local storage
+    const pointsXs = localStorage.getItem('xPoints')
+    const newXPoints = JSON.parse(pointsXs) + 1;
+    localStorage.setItem('xPoints', `${newXPoints}`)
 }
 
 restartButton.addEventListener('click', startGame)
